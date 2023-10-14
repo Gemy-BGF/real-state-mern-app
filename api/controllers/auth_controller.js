@@ -25,12 +25,18 @@ export const signin = async (req, res, next) => {
 		if (!validUser) {
 			return next(errorHandler(404, "User not found"));
 		}
-		const validPassword = bcrypt.compare(password, validUser.password);
-		if (!validPassword) return next(errorHandler(401, "Wrong Credentials"));
+		const validPassword = await bcrypt.compare(password, validUser.password);
+		if (validPassword === false)
+			return next(errorHandler(401, "Wrong Credentials"));
 		const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
 		const { password: pass, ...rest } = validUser._doc;
-		res.cookie("access_token", token);
-		res.status(200).json({ ...rest, token });
+		res
+			.cookie("access_token", token, {
+				httpOnly: true,
+				expires: new Date(Date.now() + 21 * 24 * 60 * 60),
+			})
+			.status(200)
+			.json(rest);
 	} catch (error) {
 		next(error);
 	}
