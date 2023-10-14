@@ -5,6 +5,7 @@ import SignOut from "./pages/SignOut";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
 import Header from "./components/Header";
+import SignUp from "./pages/SignUp";
 export default function App() {
 	return (
 		<BrowserRouter>
@@ -17,6 +18,10 @@ export default function App() {
 				<Route
 					path='/sign-in'
 					element={<SignIn />}
+				/>
+				<Route
+					path='/sign-up'
+					element={<SignUp />}
 				/>
 				<Route
 					path='/sign-out'
